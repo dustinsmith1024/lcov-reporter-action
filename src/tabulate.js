@@ -15,10 +15,14 @@ export function tabulate(lcov, options) {
 	const folders = {}
 	for (const file of filterAndNormaliseLcov(lcov, options)) {
 		const parts = file.file.replace(options.prefix, "").split("/")
+		console.log('PARTSSSSS', parts);
 		const folder = parts.slice(0, -1).join("/")
+		console.log('FOLDERRRR', folder);
 		folders[folder] = folders[folder] || []
 		folders[folder].push(file)
 	}
+
+	console.log('FOLDERSSS', folders);
 
 	const rows = Object.keys(folders)
 		.sort()
@@ -31,16 +35,23 @@ export function tabulate(lcov, options) {
 			[],
 		)
 
+	console.log('ROWSSSSS', rows);
+
 	return table(tbody(head, ...rows))
 }
 
 function filterAndNormaliseLcov(lcov, options) {
-	return lcov
+	console.log('OPTIONSSSS', options)
+	const data = lcov
 		.map(file => ({
 			...file,
 			file: normalisePath(file.file),
 		}))
 		.filter(file => shouldBeIncluded(file.file, options))
+
+		console.log('RESULT FROM FILTER AND NORMALISE LCOV', data);
+
+		return data;
 }
 
 function shouldBeIncluded(fileName, options) {
