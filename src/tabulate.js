@@ -43,11 +43,16 @@ export function tabulate(lcov, options) {
 function filterAndNormaliseLcov(lcov, options) {
 	console.log('OPTIONSSSS', options)
 	const data = lcov
-		.map(file => ({
-			...file,
-			file: normalisePath(file.file),
-		}))
-		.filter(file => shouldBeIncluded(file.file, options))
+		.map(file => {
+			return ({
+				...file,
+				file: normalisePath(file.file),
+			});
+		})
+		.filter(file => {
+			console.log('file normalized', file);
+			return shouldBeIncluded(file.file, options);
+		});
 
 		console.log('RESULT FROM FILTER AND NORMALISE LCOV', data);
 
@@ -55,10 +60,15 @@ function filterAndNormaliseLcov(lcov, options) {
 }
 
 function shouldBeIncluded(fileName, options) {
+	console.log('should be included', filename, options);
 	if (!options.shouldFilterChangedFiles) {
+		console.log('shorted...');
 		return true
 	}
-	return options.changedFiles.includes(fileName.replace(options.prefix, ""))
+
+	const x = options.changedFiles.includes(fileName.replace(options.prefix, ""))
+	console.log('includes??', x);
+	return x;
 }
 
 function toFolder(path) {
